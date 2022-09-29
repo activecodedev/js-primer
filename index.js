@@ -1,15 +1,50 @@
 let hat = {
    name: "czapka",
-   price: 100
+   _price: 100,
+   priceIncTax: 100 * 1.2,
+
+   set price(newPrice) {
+      this._price = newPrice;
+      this.priceIncTax = this._price * 1.2;
+   },
+
+   get price() {
+      return this._price;
+   }
 };
 let boots = {
    name: "buty",
-   price: "100"
+   price: "100",
+
+   get priceIncTax() {
+      return Number(this.price) * 1.2;
+   }
 };
+
+console.log(`czapka: ${hat.price}, ${hat.priceIncTax}`);
+hat.price = 120;
+console.log(`czapka: ${hat.price}, ${hat.priceIncTax}`);
+
+console.log(`buty: ${boots.price}, ${boots.priceIncTax}`);
+hat.price = "120";
+console.log(`buty: ${boots.price}, ${boots.priceIncTax}`);
+
 let gloves = {
    productName: "rękawiczki",
    price: "40"
 };
+let otherHat = { ...hat };
+
+console.log(`Rozwinięcie: ${otherHat.name}, ${otherHat.price}`);
+
+let additionalProperties = { ...hat, discounted: true };
+console.log(`Dodatkowe: ${JSON.stringify(additionalProperties)}`);
+
+let replacedProperties = { ...hat, price: 10 };
+console.log(`Zastąpione: ${JSON.stringify(replacedProperties)}`);
+
+let { price, ...someProperties } = hat;
+console.log(`Wybrane: ${JSON.stringify(someProperties)}`);
 
 gloves.name = gloves.productName;
 delete gloves.productName;
