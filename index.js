@@ -1,60 +1,39 @@
-// let ProductProto = {
-//    toString: function () {
-//       return `toString: nazwa: ${this.name}, cena: ${this.price}`;
-//    }
-// };
+class Product {
+   constructor(name, price) {
+      this.name = name;
+      this.price = price;
+   }
 
-// let hat = {
-//    name: "czapka",
-//    price: 100,
-
-//    getPriceIncTax() {
-//       return Number(this.price * 1.2);
-//    }
-// };
-// let boots = {
-//    name: "buty",
-//    price: "100",
-
-//    getPriceIncTax() {
-//       return Number(this.price * 1.2);
-//    }
-// };
-
-// Object.setPrototypeOf(hat, ProductProto);
-// Object.setPrototypeOf(boots, ProductProto);
-
-// console.log(hat.toString());
-// console.log(boots.toString());
-
-let Product = function (name, price) {
-   this.name = name;
-   this.price = price;
+   toString() {
+      return `toString: nazwa ${this.name}, cena: ${this.price}`;
+   }
 }
 
-Product.prototype.toString = function () {
-   return `toString: nazwa: ${this.name}, cena: ${this.price}`;
+class TaxedProduct extends Product {
+   constructor(name, price, taxRate = 1.2) {
+      super(name, price);
+      this.taxRate = taxRate;
+   }
+
+   getPriceIncTax(){
+      return Number(this.price) * this.taxRate;
+   }
+
+   toString(){
+      let chainResult = super.toString();
+
+      return `${chainResult}, z podatkiem: ${this.getPriceIncTax()}`;
+   }
+
+   static process(...products){
+      products.forEach(p => console.log(p.toString()));
+   }
 }
 
-let TaxedProduct = function (name, price, taxRate) {
-   Product.call(this, name, price);
-   this.taxRate = taxRate;
-}
-Object.setPrototypeOf(TaxedProduct.prototype, Product.prototype);
-TaxedProduct.prototype.getPriceIncTax = function () {
-   return Number(this.price) * this.taxRate;
-}
+TaxedProduct.process(new TaxedProduct("czapka", 100, 1.2), new TaxedProduct("buty", 100))
 
-TaxedProduct.prototype.toTaxString = function() {
-   return `${this.toString()}, z podatkiem: ${this.getPriceIncTax()}`;
-}
+let hat = new TaxedProduct("czapka", 100);
+let boots = new TaxedProduct("buty", 100, 1.3);
 
-let hat = new TaxedProduct("czapka", 100, 1.2);
-let boots = new Product("buty", 100);
-
-console.log(hat.toTaxString());
+console.log(hat.toString());
 console.log(boots.toString());
-console.log(`hat i TaxedProduct: ${hat instanceof TaxedProduct}`);
-console.log(`hat i Product: ${hat instanceof Product}`);
-console.log(`boots i TaxedProduct: ${boots instanceof TaxedProduct}`);
-console.log(`boots i Product: ${boots instanceof Product}`);
