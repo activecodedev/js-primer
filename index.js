@@ -1,5 +1,6 @@
 class Product {
    constructor(name, price) {
+      this.id = Symbol();
       this.name = name;
       this.price = price;
    }
@@ -91,3 +92,57 @@ let boots = new TaxedProduct("buty", 100, 1.3);
 
 console.log(hat.toString());
 console.log(boots.toString());
+
+class GiftPack {
+   constructor(name, prod1, prod2, prod3) {
+      this.name = name;
+      this.prod1 = prod1;
+      this.prod2 = prod2;
+      this.prod3 = prod3;
+   }
+
+   getTotalPrice() {
+      return [this.prod1, this.prod2, this.prod3].reduce((total, p) => total + p.price, 0);
+   }
+
+   *[Symbol.iterator]() {
+      yield this.prod1;
+      yield this.prod2;
+      yield this.prod3;
+   }
+}
+
+let winter = new GiftPack("zima", new Product("czapka", 100), new Product("buty", 100), new Product("parasol", 23));
+console.log(`Wartość całkowita: ${winter.getTotalPrice()}`);
+[...winter].forEach(p => console.log(`Produkt: ${p}`));
+
+// -- Section: collection in JS ---
+let data = {
+   hat: new Product("czapka", 100)
+}
+data.boots = new Product("buty", 100);
+Object.keys(data).forEach(key => console.log(data[key].toString()));
+
+let data2 = new Map();
+data2.set("hat", new Product("czapka", 100));
+data2.set("boots", new Product("buty", 100));
+[...data2.keys()].forEach(p => console.log(data2.get(p).toString()));
+
+// --- Use Symbol as a key ---
+class Supplier {
+   constructor(name, productids) {
+      this.name = name;
+      this.productids = productids;
+   }
+}
+
+let acmeProducts = [new Product("czapka", 100), new Product("buty", 100)];
+let zoomProducts = [new Product("czapka", 100), new Product("buty", 100)];
+
+let products = new Map();
+[...acmeProducts, ...zoomProducts].forEach(p => products.set(p.id, p));
+let suppliers = new Map();
+suppliers.set("acme", new Supplier("Acme Co", acmeProducts.map(p => p.id)));
+suppliers.set("zoom", new Supplier("Zoom Shoes", zoomProducts.map(p => p.id)));
+
+suppliers.get("acme").productids.forEach(id => console.log(`nazwa: ${products.get(id).name}`));
