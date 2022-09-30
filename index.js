@@ -9,23 +9,61 @@ class Product {
    }
 }
 
+function createProductIterator() {
+   const hat = new Product("czapka", 100);
+   const boots = new Product("buty", 100);
+   const umbrella = new Product("parasol", 23);
+
+   let lastVal;
+
+   return {
+      next() {
+         switch (lastVal) {
+            case undefined:
+               lastVal = hat;
+               return { value: hat, done: false };
+               break;
+            case hat:
+               lastVal = boots;
+               return { value: boots, done: false };
+            case boots:
+               lastVal = umbrella;
+               return { value: umbrella, done: false };
+            case umbrella:
+               lastVal = undefined;
+               return { value: undefined, done: true };
+
+            default:
+               break;
+         }
+      }
+   }
+}
+
+let iterator = createProductIterator();
+let result = iterator.next();
+while (!result.done) {
+   console.log(result.value.toString());
+   result = iterator.next();
+}
+
 class TaxedProduct extends Product {
    constructor(name, price, taxRate = 1.2) {
       super(name, price);
       this.taxRate = taxRate;
    }
 
-   getPriceIncTax(){
+   getPriceIncTax() {
       return Number(this.price) * this.taxRate;
    }
 
-   toString(){
+   toString() {
       let chainResult = super.toString();
 
       return `${chainResult}, z podatkiem: ${this.getPriceIncTax()}`;
    }
 
-   static process(...products){
+   static process(...products) {
       products.forEach(p => console.log(p.toString()));
    }
 }
