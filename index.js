@@ -47,6 +47,22 @@ while (!result.done) {
    result = iterator.next();
 }
 
+function* createProductIterator2() {
+   yield new Product("czapka", 100);
+   yield new Product("buty", 100);
+   yield new Product("parasol", 23);
+}
+
+[...createProductIterator2()].forEach(p => console.log(p.toString()));
+
+// --- Standard use of generator ---
+// let iterator2 = createProductIterator2();
+// let result2 = iterator2.next();
+// while (!result2.done) {
+//    console.log(result2.value.toString());
+//    result2 = iterator2.next();
+// }
+
 class TaxedProduct extends Product {
    constructor(name, price, taxRate = 1.2) {
       super(name, price);
