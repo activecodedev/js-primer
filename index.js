@@ -146,3 +146,17 @@ suppliers.set("acme", new Supplier("Acme Co", acmeProducts.map(p => p.id)));
 suppliers.set("zoom", new Supplier("Zoom Shoes", zoomProducts.map(p => p.id)));
 
 suppliers.get("acme").productids.forEach(id => console.log(`nazwa: ${products.get(id).name}`));
+
+// --- Use Set collection ---
+let product = new Product("czapka", 100);
+
+let productArray = [];
+let productSet = new Set();
+
+for (let i = 0; i < 5; i++) {
+   productArray.push(product);
+   productSet.add(product);
+}
+
+console.log(`Wielkość tablicy: ${productArray.length}`);
+console.log(`Wielkość zbioru: ${productSet.size}`);
