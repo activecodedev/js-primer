@@ -1,3 +1,6 @@
+import calcTaxAndSum, { calculateTax } from './tax';
+import { printDetails, applyDiscount } from "./utils";
+
 class Product {
    constructor(name, price) {
       this.id = Symbol();
@@ -160,3 +163,14 @@ for (let i = 0; i < 5; i++) {
 
 console.log(`Wielkość tablicy: ${productArray.length}`);
 console.log(`Wielkość zbioru: ${productSet.size}`);
+
+// -- Use module from external file ---
+let product2 = new Product("czapka", 100);
+applyDiscount(product2, 10);
+let taxedPrice = calculateTax(product2.price);
+printDetails(product);
+console.log(`nazwa: ${product2.name}, cena wraz z podatkiem: ${taxedPrice}`);
+
+let products2 = [new Product("rękawiczki", 23), new Product("buty", 100)];
+let totalPrice = calcTaxAndSum(...products2.map(p => p.price));
+console.log(`cena całkowita: ${totalPrice.toFixed(2)}`);
